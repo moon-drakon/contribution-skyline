@@ -292,6 +292,8 @@ export interface ContributionSkylineProps {
   /** Seed for the generated sample year. */
   seed?: number
   onCellClick?: (day: ContributionDay) => void
+  /** Dates shown under "1 year total". Defaults to the first and last day of the grid. */
+  totalRange?: { start: string; end: string }
   className?: string
 }
 
@@ -458,6 +460,7 @@ export default function ContributionSkyline({
   locale = "en-US",
   seed = 7,
   onCellClick,
+  totalRange,
   className = "",
 }: ContributionSkylineProps) {
   const endKey = endDate == null ? null : dayMs(endDate)
@@ -1163,7 +1166,7 @@ export default function ContributionSkyline({
   const corners = showStats && width >= 560
   const bigSize = Math.round(Math.max(30, Math.min(56, width * 0.058)))
   const statBlocks = [
-    { label: "1 year total", value: nf.format(stats.total), unit: noun(stats.total), sub: range(stats.first, stats.last, true) },
+    { label: "1 year total", value: nf.format(stats.total), unit: noun(stats.total), sub: totalRange ? range(totalRange.start, totalRange.end, true) : range(stats.first, stats.last, true) },
     { label: "Busiest day", value: nf.format(stats.busiest.count), unit: noun(stats.busiest.count), sub: stats.busiest.date ? df.format(dayMs(stats.busiest.date)) : "none yet" },
     { label: "Longest streak", value: nf.format(stats.longest.days), unit: stats.longest.days === 1 ? "day" : "days", sub: range(stats.longest.start, stats.longest.end) },
     { label: "Current streak", value: nf.format(stats.current.days), unit: stats.current.days === 1 ? "day" : "days", sub: range(stats.current.start, stats.current.end) },

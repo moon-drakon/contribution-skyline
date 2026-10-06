@@ -21,6 +21,13 @@ const subscribe = (onChange: () => void) => {
 const yearFromUrl = () => new URLSearchParams(window.location.search).get("year")
 const noYear = () => null
 
+/** "YYYY-MM-DD" moved by `days`, in UTC. */
+const shiftDays = (date: string, days: number) => {
+  const d = new Date(`${date}T00:00:00Z`)
+  d.setUTCDate(d.getUTCDate() + days)
+  return d.toISOString().slice(0, 10)
+}
+
 /** The skyline plus a year picker: the rolling last 12 months, then each calendar year. */
 export function ContributionExplorer({ data }: { data: ContributionData }) {
   const years = React.useMemo(() => Object.keys(data.years).sort((a, b) => Number(b) - Number(a)), [data])
@@ -42,6 +49,12 @@ export function ContributionExplorer({ data }: { data: ContributionData }) {
   const total = days.reduce((sum, d) => sum + d.count, 0)
   // A calendar year runs Jan to Dec, like GitHub's year view. The rolling view ends on the build day.
   const endDate = isLast ? (data.updated ?? undefined) : `${selected}-12-31`
+  // The dates under "1 year total": Jan 1 to Dec 31 for a year, the exact 365 days for the rolling view.
+  const totalRange = isLast
+    ? data.updated
+      ? { start: shiftDays(data.updated, -364), end: data.updated }
+      : undefined
+    : { start: `${selected}-01-01`, end: `${selected}-12-31` }
   const title = isLast ? undefined : (
     <>
       <span className="font-semibold tabular-nums">{total.toLocaleString("en-US")}</span>{" "}
@@ -79,7 +92,14 @@ export function ContributionExplorer({ data }: { data: ContributionData }) {
       </nav>
 
       <div className="min-w-0 flex-1">
-        <ContributionSkyline data={days} endDate={endDate} title={title} palette="github" defaultView="3d" />
+        <ContributionSkyline
+          data={days}
+          endDate={endDate}
+          title={title}
+          totalRange={totalRange}
+          palette="github"
+          defaultView="3d"
+        />
       </div>
     </div>
   )
