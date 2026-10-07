@@ -1,7 +1,5 @@
-import { ContributionExplorer, type ContributionData } from "@/components/contribution-explorer"
-import contributions from "@/data/contributions.json"
-
-const data = contributions as ContributionData
+import { ContributionExplorer } from "@/components/contribution-explorer"
+import { TEMPLATE_URL, data, siteName } from "@/lib/site"
 
 const updated = data.updated
   ? new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(
@@ -9,24 +7,22 @@ const updated = data.updated
     )
   : null
 
-const links = [
-  { label: "GitHub", href: "https://github.com/moon-drakon" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/drakon/" },
-  { label: "Email", href: "mailto:shibimoon08@gmail.com" },
-  { label: "Source", href: "https://github.com/moon-drakon/contribution-skyline" },
-]
+const profile = data.profile
+const links = [...(profile?.links ?? []), { label: "Source", href: data.repo ? `https://github.com/${data.repo}` : TEMPLATE_URL }]
 
 export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col gap-8 px-4 py-12 sm:px-8 sm:py-16">
       <header className="flex flex-col gap-2">
-        <a
-          href="https://github.com/moon-drakon"
-          className="w-fit font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          github.com/moon-drakon
-        </a>
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Shibli Rahman Moon</h1>
+        {profile && (
+          <a
+            href={`https://github.com/${profile.login}`}
+            className="w-fit font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            github.com/{profile.login}
+          </a>
+        )}
+        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{siteName}</h1>
         <p className="max-w-[62ch] text-muted-foreground">
           My GitHub contributions, year by year. Switch between the heat map and the 3D skyline. Hover or tap a day for
           its count, and drag the skyline to orbit it.
@@ -36,10 +32,15 @@ export default function Home() {
       <ContributionExplorer data={data} />
 
       <footer className="flex flex-col gap-3 border-t pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <span>{updated ? `Updated ${updated} from the GitHub API` : "Updated daily from the GitHub API"}</span>
+        <span>
+          {updated ? `Updated ${updated} from the GitHub API` : "Updated daily from the GitHub API"} ·{" "}
+          <a href={`${TEMPLATE_URL}#make-your-own`} className="underline underline-offset-4 transition-colors hover:text-foreground">
+            Make your own
+          </a>
+        </span>
         <nav aria-label="Links" className="flex flex-wrap gap-x-5 gap-y-2">
           {links.map((l) => (
-            <a key={l.label} href={l.href} className="transition-colors hover:text-foreground">
+            <a key={l.href} href={l.href} className="transition-colors hover:text-foreground">
               {l.label}
             </a>
           ))}

@@ -27,16 +27,26 @@ jobs:
           node-version: 22
           cache: npm
 
+      # Fails here if Pages is not enabled with "GitHub Actions" as the source.
+      - id: pages
+        uses: actions/configure-pages@v6
+
       - run: npm ci
 
       # Fails the job if the API call fails, so the last good deploy stays live.
+      # DISPLAY_NAME and EXTRA_LINKS are optional repository variables.
       - name: Fetch contributions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_LOGIN: ${{ github.repository_owner }}
+          DISPLAY_NAME: ${{ vars.DISPLAY_NAME }}
+          EXTRA_LINKS: ${{ vars.EXTRA_LINKS }}
         run: node scripts/fetch-contributions.mjs
 
-      - run: npm run build
+      - name: Build
+        env:
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: npm run build
 
       - uses: actions/upload-pages-artifact@v5
         with:

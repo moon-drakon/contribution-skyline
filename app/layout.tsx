@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { data, siteName } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Contribution Skyline · Shibli Rahman Moon",
-  description: "A year of GitHub contributions by moon-drakon, as a heat map and an interactive 3D skyline.",
+  title: data.profile ? `Contribution Skyline · ${siteName}` : "Contribution Skyline",
+  description: `A year of GitHub contributions${data.profile ? ` by ${data.profile.login}` : ""}, as a heat map and an interactive 3D skyline.`,
 };
 
 export const viewport: Viewport = {
