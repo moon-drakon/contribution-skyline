@@ -13,9 +13,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const title = data.profile ? `Contribution Skyline · ${siteName}` : "Contribution Skyline";
+const description = `A year of GitHub contributions${data.profile ? ` by ${data.profile.login}` : ""}, as a heat map and an interactive 3D skyline.`;
+// The deploy workflow sets PAGES_BASE_URL, so search engines get one canonical address.
+const siteUrl = process.env.PAGES_BASE_URL ? `${process.env.PAGES_BASE_URL.replace(/\/$/, "")}/` : undefined;
+
 export const metadata: Metadata = {
-  title: data.profile ? `Contribution Skyline · ${siteName}` : "Contribution Skyline",
-  description: `A year of GitHub contributions${data.profile ? ` by ${data.profile.login}` : ""}, as a heat map and an interactive 3D skyline.`,
+  title,
+  description,
+  ...(siteUrl && { metadataBase: new URL(siteUrl), alternates: { canonical: siteUrl } }),
+  openGraph: { type: "website", title, description, url: siteUrl, siteName },
+  twitter: { card: "summary", title, description },
 };
 
 export const viewport: Viewport = {
