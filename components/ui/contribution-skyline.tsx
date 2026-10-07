@@ -1237,7 +1237,7 @@ export default function ContributionSkyline({
         <div className="relative px-3 pt-3 sm:px-4 sm:pt-4">
           <div
             ref={stageRef}
-            className="relative w-full overflow-hidden rounded-md outline-offset-4 has-[:focus-visible]:outline-2"
+            className="relative w-full select-none overflow-hidden rounded-md outline-offset-4 has-[:focus-visible]:outline-2"
             style={{ height: 150, outlineColor: "var(--color-foreground, #171717)" }}
           >
             <canvas
