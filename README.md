@@ -62,11 +62,6 @@ If an API call fails, the deploy stops and the last good version stays live.
 | Data | `scripts/fetch-contributions.mjs`, GitHub REST and GraphQL APIs |
 | Hosting | GitHub Pages, deployed by `.github/workflows/deploy.yml` |
 
-## Credits
-
-The 3D chart is based on the Contribution Skyline component by kedhareswer.
-The year picker, data pipeline, template setup, and page are mine.
-
 ## Run locally
 
 Requires Node.js 22. Any GitHub token works, and it needs no extra scopes.
