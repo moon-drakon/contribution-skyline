@@ -59,15 +59,13 @@ If an API call fails, the deploy stops and the last good version stays live.
 | --- | --- |
 | Framework | Next.js 16 (static export), React 19, TypeScript |
 | Styling | Tailwind CSS v4, shadcn/ui project structure |
-| Chart | [Contribution Skyline](https://21st.dev/@kedhareswer/components/contribution-skyline) by kedhareswer, in `components/ui` |
 | Data | `scripts/fetch-contributions.mjs`, GitHub REST and GraphQL APIs |
 | Hosting | GitHub Pages, deployed by `.github/workflows/deploy.yml` |
 
 ## Credits
 
-The chart is the [Contribution Skyline](https://21st.dev/@kedhareswer/components/contribution-skyline)
-component by kedhareswer, in `components/ui/contribution-skyline.tsx`. The year picker,
-data pipeline, template setup, and page are mine.
+The 3D chart is based on the Contribution Skyline component by kedhareswer.
+The year picker, data pipeline, template setup, and page are mine.
 
 ## Run locally
 
